@@ -1,5 +1,7 @@
 {
   "name": "push-app",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }
