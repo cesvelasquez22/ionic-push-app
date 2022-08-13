@@ -1,6 +1,6 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
-    <ion-title> Blank </ion-title>
+    <ion-title> Push Notifications App </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -10,7 +10,7 @@
       <ion-label>Notifications history</ion-label>
     </ion-list-header>
 
-    <ion-item *ngFor="let notification of pushReceived$ | async">
+    <ion-item *ngFor="let notification of notifications">
       <ion-label>
         <h3>{{ notification.title }}</h3>
         <p>{{ notification.body }}</p>

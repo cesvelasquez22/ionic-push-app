@@ -1,29 +1,17 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import {
   OneSignal,
   OSNotification,
   OSNotificationPayload,
 } from '@awesome-cordova-plugins/onesignal/ngx';
-import { BehaviorSubject } from 'rxjs';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PushService {
-  private _pushReceived = new BehaviorSubject<OSNotificationPayload[]>([]);
-  public pushReceived$ = this._pushReceived.asObservable();
-  public messages: any[] = [
-    {
-      title: 'Notification 1',
-      body: 'This is the body of notification 1',
-      date: new Date(),
-    },
-  ];
-  constructor(private oneSignal: OneSignal) {}
-
-  get pushReceived() {
-    return this._pushReceived.value;
-  }
+  public notificationListener = new EventEmitter<OSNotificationPayload>();
+  constructor(private oneSignal: OneSignal, private storage: StorageService) {}
 
   initOneSignal() {
     this.oneSignal.startInit(
@@ -50,14 +38,13 @@ export class PushService {
   }
 
   nextNotificationReceived(notification: OSNotification) {
-    // this._pushReceived.next(notification);
     const payload = notification.payload;
-    const existingMessage = !!this.messages.find(
+    const existingMessage = !!this.storage.notifications.find(
       (message) => message.notificationID === payload.notificationID
     );
     if (!existingMessage) {
-      // this.messages.unshift(payload);
-      this._pushReceived.next([payload, ...this.pushReceived]);
+      this.storage.setNotification(payload);
+      this.notificationListener.emit(payload);
     }
   }
 }

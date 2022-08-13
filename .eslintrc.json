@@ -37,6 +37,7 @@
           }
         ],
         "@typescript-eslint/member-ordering": "off",
+        "@typescript-eslint/naming-convention": "off",
         "no-underscore-dangle": "off",
         "max-len": "off"
       }
