@@ -28,4 +28,9 @@ export class HomePage implements OnInit {
   ionViewWillEnter() {
     this.notifications = this.storage.notifications;
   }
+
+  async onClearNotifications() {
+    await this.storage.clearNotifications();
+    this.notifications = [];
+  }
 }

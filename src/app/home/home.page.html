@@ -1,6 +1,11 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-title> Push Notifications App </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onClearNotifications()" color="danger">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

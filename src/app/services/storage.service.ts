@@ -54,8 +54,17 @@ export class StorageService {
     return this._storage?.get(key);
   }
 
+  public remove(key: string) {
+    return this._storage?.remove(key);
+  }
+
   public async setNotification(notification: OSNotificationPayload) {
     this._localNotifications.unshift(notification);
     return await this.set(this.NOTIFICATIONS_KEY, this._localNotifications);
+  }
+
+  public async clearNotifications() {
+    await this.remove(this.NOTIFICATIONS_KEY);
+    await this.loadNotifications();
   }
 }
