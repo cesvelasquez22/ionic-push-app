@@ -33,18 +33,29 @@ export class StorageService {
     return [...this._localNotifications];
   }
 
+  existsNotification(notification: OSNotificationPayload) {
+    return new Promise<boolean>((resolve, reject) => {
+      this._localNotifications.some((localNotification) => {
+        if (localNotification.notificationID === notification.notificationID) {
+          resolve(true);
+        }
+      });
+      reject(false);
+    });
+  }
+
   // Create and expose methods that users of this service can
   // call, for example:
   public set(key: string, value: any) {
-    this._storage?.set(key, value);
+    return this._storage?.set(key, value);
   }
 
   public get(key: string) {
     return this._storage?.get(key);
   }
 
-  public setNotification(notification: OSNotificationPayload) {
+  public async setNotification(notification: OSNotificationPayload) {
     this._localNotifications.unshift(notification);
-    this.set(this.NOTIFICATIONS_KEY, this._localNotifications);
+    return await this.set(this.NOTIFICATIONS_KEY, this._localNotifications);
   }
 }

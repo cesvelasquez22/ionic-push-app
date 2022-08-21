@@ -29,21 +29,23 @@ export class PushService {
       this.nextNotificationReceived(notification);
     });
 
-    this.oneSignal.handleNotificationOpened().subscribe((notification) => {
+    this.oneSignal.handleNotificationOpened().subscribe(async (notification) => {
       // do something when a notification is opened
       console.log('Notification opened', notification);
+      await this.nextNotificationReceived(notification.notification);
     });
 
     this.oneSignal.endInit();
   }
 
-  nextNotificationReceived(notification: OSNotification) {
+  async nextNotificationReceived(notification: OSNotification) {
+    await this.storage.loadNotifications();
     const payload = notification.payload;
     const existingMessage = !!this.storage.notifications.find(
       (message) => message.notificationID === payload.notificationID
     );
     if (!existingMessage) {
-      this.storage.setNotification(payload);
+      await this.storage.setNotification(payload);
       this.notificationListener.emit(payload);
     }
   }
