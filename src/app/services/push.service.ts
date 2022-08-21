@@ -11,6 +11,7 @@ import { StorageService } from './storage.service';
 })
 export class PushService {
   public notificationListener = new EventEmitter<OSNotificationPayload>();
+  public userId = '';
   constructor(private oneSignal: OneSignal, private storage: StorageService) {}
 
   initOneSignal() {
@@ -29,10 +30,18 @@ export class PushService {
       this.nextNotificationReceived(notification);
     });
 
-    this.oneSignal.handleNotificationOpened().subscribe(async (notification) => {
-      // do something when a notification is opened
-      console.log('Notification opened', notification);
-      await this.nextNotificationReceived(notification.notification);
+    this.oneSignal
+      .handleNotificationOpened()
+      .subscribe(async (notification) => {
+        // do something when a notification is opened
+        console.log('Notification opened', notification);
+        await this.nextNotificationReceived(notification.notification);
+      });
+
+    // Get the userId from the device
+    this.oneSignal.getIds().then((ids) => {
+      this.userId = ids.userId;
+      console.log('User ID is: ', this.userId);
     });
 
     this.oneSignal.endInit();

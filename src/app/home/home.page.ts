@@ -10,6 +10,7 @@ import { StorageService } from '../services/storage.service';
 })
 export class HomePage implements OnInit {
   notifications: OSNotificationPayload[] = [];
+  userId = this.pushService.userId;
 
   constructor(
     private pushService: PushService,
